@@ -3,11 +3,25 @@ from uagents.setup import fund_agent_if_low
 from message.resume_create import ResumeCreateRequest, ResumeCreateResponse
 from message.resume_optimiser import ResumeOptimiseRequest, ResumeOptimiseResponse
 from utlis.generate_resume import generate
+from protocols import simples
 import json
 import requests
 
 
-agent = Agent("core", seed="core's seceret seed")
+AGENT_MAILBOX_KEY = "7238038d-75a2-4350-91b5-491fc69985b5"
+
+agent = Agent(
+    name="core",
+    seed="core's seceret seed",
+    mailbox=f"{AGENT_MAILBOX_KEY}@https://agentverse.ai",
+)
+
+
+agent.include(simples)
+
+
+class Messages:
+    message: str
 
 
 fund_agent_if_low(agent.wallet.address())
@@ -36,14 +50,15 @@ async def say_hello(ctx: Context):
 async def get_resume_text(ctx: Context, sender: str, msg: ResumeCreateResponse):
     ctx.logger.info(f"Received message from {sender} in core, session: {ctx.session}")
     ctx.logger.info(f"{msg}")
-    await ctx.send(
-        "agent1qfv0hu2g5zhz9ptderhw75dqlnwvs40y463tm0ps486wey74xvej54hzse2",
-        ResumeOptimiseRequest(resume_text=resume_text),
-    )
+    # await ctx.send(
+    #     "agent1qfv0hu2g5zhz9ptderhw75dqlnwvs40y463tm0ps486wey74xvej54hzse2",
+    #     ResumeOptimiseRequest(resume_text=resume_text),
+    # )
 
 
 if __name__ == "__main__":
     bureau = Bureau(endpoint=["http://127.0.0.1:8005/submit"], port=8005)
     print(f"Adding core agent to Bureau: {agent.address}")
+
     bureau.add(agent)
     bureau.run()
