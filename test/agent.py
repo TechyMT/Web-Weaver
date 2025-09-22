@@ -13,7 +13,6 @@ AGENT_MAILBOX_KEY = "7238038d-75a2-4350-91b5-491fc69985b5"
 agent = Agent(
     name="core",
     seed="core's seceret seed",
-    mailbox=f"{AGENT_MAILBOX_KEY}@https://agentverse.ai",
 )
 
 
